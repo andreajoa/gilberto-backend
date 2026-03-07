@@ -668,6 +668,29 @@ app.get('/api/dashboard', async (req, res) => {
   }
 });
 
+// --- ROTAS INTERNACIONAIS MAX ---
+app.post('/api/chat-en', (req, res) => {
+  const m = (req.body.message || '').toLowerCase();
+  let r = 'I am here to help with the book, price, or instant access. What do you need?';
+  if (/(price|cost|discount)/.test(m)) r = 'The digital eBook + Audiobook is on a special discount! Secure your instant access now.';
+  else if (/(shipping|delivery|time)/.test(m)) r = 'You get instant access right after purchase! No waiting.';
+  else if (/(book|about|story)/.test(m)) r = 'It is a real story about overcoming betrayal and finding inner strength.';
+  else if (/(buy|purchase|checkout)/.test(m)) r = 'Great! Click the cart icon to complete your purchase and get instant access.';
+  else if (/^(hello|hi|hey)/.test(m)) r = 'Hey brother. I am MAX, Gilberto\'s assistant. How can I help?';
+  res.json({ message: r, conversationId: req.body.conversationId || 'chat_en_' + Date.now() });
+});
+
+app.post('/api/chat-es', (req, res) => {
+  const m = (req.body.message || '').toLowerCase();
+  let r = 'Estoy aquí para ayudarte con información sobre el libro o el acceso instantáneo. ¿Qué necesitas?';
+  if (/(precio|cuesta|descuento)/.test(m)) r = '¡El eBook + Audiolibro está con descuento especial! Acceso instantáneo.';
+  else if (/(envío|entrega|tiempo)/.test(m)) r = '¡Recibirás acceso instantáneo justo después de la compra! Sin esperas.';
+  else if (/(libro|sobre)/.test(m)) r = 'Es una historia real sobre traición y cómo encontrar tu fuerza interior.';
+  else if (/(comprar|carrito|adquirir)/.test(m)) r = '¡Genial! Haz clic en el carrito para comprar de forma segura.';
+  else if (/^(hola|buenas|hey)/.test(m)) r = 'Hola hermano. Soy MAX, el asistente de Gilberto. ¿En qué te ayudo?';
+  res.json({ message: r, conversationId: req.body.conversationId || 'chat_es_' + Date.now() });
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
   console.log(`Dashboard disponivel em http://localhost:${PORT}/api/dashboard`);
