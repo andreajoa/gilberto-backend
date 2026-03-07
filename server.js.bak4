@@ -571,47 +571,6 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
-
-// --- LOGICA DO CHAT EM INGLES (MAX) ---
-function getDemoResponseEN(message, chatId) {
-  const lower = message.toLowerCase().replace(/[?!.]/g, '').trim();
-  if (/(price|cost|how much|discount)/.test(lower)) return "The digital eBook + Audiobook bundle is currently on a special discount! It's a small investment in yourself that will change your life. Would you like to secure your copy now?";
-  if (/(shipping|delivery|time|how long)/.test(lower)) return "You'll receive instant access to the digital eBook and Audiobook right after purchase! No waiting for shipping.";
-  if (/(book|about|what is it|story)/.test(lower)) return "It's a real story about betrayal, rebuilding yourself, and emotional freedom. Written by Gilberto, who went through the exact same pain. It addresses rejection, the mental loop, and how to find your inner strength.";
-  if (/(buy|purchase|cart|checkout)/.test(lower)) return "Great decision! You can click the Cart icon at the top right or any buy button to complete your secure purchase. You'll get instant access.";
-  if (/^(hello|hi|hey|good morning|good afternoon)/.test(lower)) return "Hey brother. I'm MAX, Gilberto's assistant. How can I help you today? I can answer questions about the book, price, or how to get instant access.";
-  return "I understand. I'm here to help you with information about the book, the price, or how to get instant access. What do you need?";
-}
-
-app.post('/api/chat-en', async (req, res) => {
-  try {
-    const { message, conversationId } = req.body;
-    if (!message) return res.status(400).json({ error: 'Message required' });
-    const chatId = conversationId || `chat_en_${Date.now()}`;
-    res.json({ message: getDemoResponseEN(message, chatId), conversationId: chatId });
-  } catch (error) { res.status(500).json({ error: 'Server Error' }); }
-});
-
-// --- LOGICA DO CHAT EM ESPANHOL (MAX) ---
-function getDemoResponseES(message, chatId) {
-  const lower = message.toLowerCase().replace(/[?!.]/g, '').trim();
-  if (/(precio|cuesta|cuánto|cuanto|descuento)/.test(lower)) return "¡El paquete de eBook digital + Audiolibro está actualmente con un descuento especial! Es una pequeña inversión en ti mismo que cambiará tu vida. ¿Te gustaría asegurar tu copia ahora?";
-  if (/(envío|entrega|tiempo|cuánto tarda)/.test(lower)) return "¡Recibirás acceso instantáneo al eBook digital y al audiolibro justo después de la compra! No hay que esperar envíos físicos.";
-  if (/(libro|sobre|qué es|historia)/.test(lower)) return "Es una historia real sobre traición, reconstrucción y libertad emocional. Escrito por Gilberto, quien pasó por el mismo dolor. Aborda el rechazo, el bucle mental y cómo encontrar tu fuerza interior.";
-  if (/(comprar|carrito|checkout|adquirir)/.test(lower)) return "¡Gran decisión! Puedes hacer clic en el ícono del carrito para completar tu compra de forma segura. Obtendrás acceso instantáneo.";
-  if (/^(hola|buenas|hey|buenos días|buenas tardes)/.test(lower)) return "Hola hermano. Soy MAX, el asistente de Gilberto. ¿En qué te puedo ayudar hoy? Puedo responder preguntas sobre el libro, el precio o cómo comprar.";
-  return "Entiendo. Estoy aquí para ayudarte con información sobre el libro, el precio o cómo obtener acceso instantáneo. ¿Qué necesitas?";
-}
-
-app.post('/api/chat-es', async (req, res) => {
-  try {
-    const { message, conversationId } = req.body;
-    if (!message) return res.status(400).json({ error: 'Mensaje requerido' });
-    const chatId = conversationId || `chat_es_${Date.now()}`;
-    res.json({ message: getDemoResponseES(message, chatId), conversationId: chatId });
-  } catch (error) { res.status(500).json({ error: 'Error' }); }
-});
-
 app.get('/api/chats', async (req, res) => {
   try {
     const data = JSON.parse(await fs.readFile(CHATS_FILE, 'utf8'));
