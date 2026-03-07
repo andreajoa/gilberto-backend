@@ -696,7 +696,7 @@ app.listen(PORT, () => {
   console.log(`Dashboard disponivel em http://localhost:${PORT}/api/dashboard`);
 });
 
-const getDemoResponseEN = (message, chatId) => {
+var velha_funcao_EN = (message, chatId) => {
   const lowerMessage = message.toLowerCase();
   if (/book|format|pdf|mp3|audiobook/.test(lowerMessage)) {
     return `You get instant access: PDF eBook + MP3 audiobook. 📖🎧`;
@@ -710,7 +710,7 @@ const getDemoResponseEN = (message, chatId) => {
   return `Hey brother! Ask about book, price, delivery or payment. What do you need? 😊`;
 };
 
-const getDemoResponseES = (message, chatId) => {
+var velha_funcao_ES = (message, chatId) => {
   const lowerMessage = message.toLowerCase();
   if (/libro|formato|pdf|mp3|audiolibro/.test(lowerMessage)) {
     return `Acceso instantáneo: eBook PDF + audiolibro MP3. 📖🎧`;
