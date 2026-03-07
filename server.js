@@ -691,6 +691,41 @@ app.post('/api/chat-es', (req, res) => {
   res.json({ message: r, conversationId: req.body.conversationId || 'chat_es_' + Date.now() });
 });
 
+// --- INTEGRAÇÃO STRIPE (BRASIL) ---
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
+app.post('/api/checkout', async (req, res) => {
+  try {
+    const { total, email, name } = req.body; 
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price_data: {
+            currency: 'brl',
+            product_data: {
+              name: 'Livro Físico: Como Vencer a Dor de Ser Trocado Por Outro',
+              description: 'Inclui valor do Frete calculado.',
+            },
+            unit_amount: Math.round(total * 100), // Converte Reais para centavos (ex: 139,00 -> 13900)
+          },
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      customer_email: email,
+      success_url: 'https://livro-gilberto.vercel.app/?pagamento=sucesso',
+      cancel_url: 'https://livro-gilberto.vercel.app/?pagamento=cancelado',
+    });
+
+    res.json({ url: session.url });
+  } catch (error) {
+    console.error('Erro na Stripe:', error);
+    res.status(500).json({ error: 'Erro ao criar tela de pagamento' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
   console.log(`Dashboard disponivel em http://localhost:${PORT}/api/dashboard`);
