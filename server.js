@@ -631,3 +631,31 @@ app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
   console.log(`Dashboard disponivel em http://localhost:${PORT}/api/dashboard`);
 });
+
+const getDemoResponseEN = (message, chatId) => {
+  const lowerMessage = message.toLowerCase();
+  if (/book|format|pdf|mp3|audiobook/.test(lowerMessage)) {
+    return `You get instant access: PDF eBook + MP3 audiobook. 📖🎧`;
+  }
+  if (/price|cost|buy/.test(lowerMessage)) {
+    return `$17 instant access (50% off). 30-day guarantee. 💰`;
+  }
+  if (/delivery|ship|where/.test(lowerMessage)) {
+    return `Digital download — instant worldwide. No shipping. ⚡`;
+  }
+  return `Hey brother! Ask about book, price, delivery or payment. What do you need? 😊`;
+};
+
+const getDemoResponseES = (message, chatId) => {
+  const lowerMessage = message.toLowerCase();
+  if (/libro|formato|pdf|mp3|audiolibro/.test(lowerMessage)) {
+    return `Acceso instantáneo: eBook PDF + audiolibro MP3. 📖🎧`;
+  }
+  if (/precio|costo|comprar/.test(lowerMessage)) {
+    return `$17 acceso instantáneo (50% off). Garantía 30 días. 💰`;
+  }
+  if (/entrega|envio|donde/.test(lowerMessage)) {
+    return `Descarga digital — instantánea mundial. Sin envío. ⚡`;
+  }
+  return `¡Hola hermano! Pregunta sobre libro, precio, entrega o pago. ¿Qué necesitas? 😊`;
+};
