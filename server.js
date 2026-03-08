@@ -758,3 +758,4 @@ var velha_funcao_ES = (message, chatId) => {
   }
   return `¡Hola hermano! Pregunta sobre libro, precio, entrega o pago. ¿Qué necesitas? 😊`;
 };
+ 
