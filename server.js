@@ -726,6 +726,49 @@ app.post('/api/checkout', async (req, res) => {
   }
 });
 
+
+// --- INTEGRAÇÃO COM A STRIPE (INTERNACIONAL - DÓLAR) ---
+app.post('/api/checkout-digital', async (req, res) => {
+  try {
+    const { total, email, name, lang } = req.body;
+    
+    // Converte Dólares para centavos (ex: 17.00 * 100 = 1700)
+    const totalEmCentavos = Math.round(Number(total) * 100);
+    
+    // Nome do produto baseado no idioma
+    const productName = lang === 'es' 
+      ? 'eBook + Audiolibro: Cómo Superar el Dolor de Ser Reemplazado'
+      : 'eBook + Audiobook: How to Overcome the Pain of Being Replaced';
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd', // Moeda em Dólar Americano!
+            product_data: {
+              name: productName,
+              description: 'Acesso instantâneo digital / Instant Digital Access',
+            },
+            unit_amount: totalEmCentavos,
+          },
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      customer_email: email,
+      // Passa a tag do idioma de volta para a página de sucesso saber em que língua falar
+      success_url: `https://livro-gilberto.vercel.app/${lang}?pagamento=sucesso`,
+      cancel_url: `https://livro-gilberto.vercel.app/${lang}?pagamento=cancelado`,
+    });
+
+    res.json({ url: session.url });
+  } catch (error) {
+    console.error('Erro na criação da sessão Stripe Digital:', error);
+    res.status(500).json({ error: 'Erro interno ao criar pagamento digital' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
   console.log(`Dashboard disponivel em http://localhost:${PORT}/api/dashboard`);
